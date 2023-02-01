@@ -26,7 +26,10 @@ class Product extends Model
             ]
         ];
     }
-
+    public function type()
+    {
+        return $this->belongsTo(Type::class,'type','id');
+    }
     public static function validate($data)
     {
         return Validator::make($data, [

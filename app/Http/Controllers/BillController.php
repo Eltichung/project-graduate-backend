@@ -40,7 +40,6 @@ class BillController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->total);
         $dataCustomer = $request->only(['name', 'phone', 'address']);
         $data = $request->only(['total', 'status', 'location', 'method']);
         $validator = Bill::validate($data);
@@ -88,7 +87,7 @@ class BillController extends Controller
         $data = $request->only(['status']);
         $validator = Validator::make($data, [
             'status' => 'bail|required|numeric',
-        ]);;
+        ]);
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()]);
         }

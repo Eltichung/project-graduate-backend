@@ -15,6 +15,7 @@ Route::group(["prefix" => 'v1/', "as" => "product."], function () {
     Route::get('/getProduct/{type}', [ProductController::class, 'filter']);
     Route::post('/createProduct', [ProductController::class, 'store']);
     Route::put('/updateProduct/{slug}', [ProductController::class, 'update']);
+    Route::get('/product/{name}', [ProductController::class, 'search']);
     Route::delete('/deleteProduct/{slug}', [ProductController::class, 'destroy']);
     //type
     Route::get('/getType', [TypeController::class, 'index']);

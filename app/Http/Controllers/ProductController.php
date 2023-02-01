@@ -13,7 +13,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $product = Product::where('isHot',1)->get();
+        $product = Product::with('type')->where('isHot',1)->get();
         return response()->json([
             'data' => $product
         ]);
@@ -21,10 +21,15 @@ class ProductController extends Controller
     public function filter($type)
     {
         return response()->json([
-            'data' => Product::where('type',$type)->get()
+            'data' => Product::with('type')->where('type',$type)->get()
         ]);
     }
-
+    public function search($name)
+    {
+        return response()->json([
+            'data' => Product::where('name','like', '%'.$name.'%')->get()
+        ]);
+    }
     public function create()
     {
         //
