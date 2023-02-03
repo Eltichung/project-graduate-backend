@@ -1,45 +1,61 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-use Validator;
-use App\Models\Detail_Bill;
-use App\Http\Requests\StoreDetail_BillRequest;
-use App\Http\Requests\UpdateDetail_BillRequest;
 
-class DetailBillController extends Controller
+use App\Models\Bill;
+use App\Models\Detail_Bill;
+use App\Models\ProductOrder;
+use App\Http\Requests\StoreProductOrderRequest;
+use App\Http\Requests\UpdateProductOrderRequest;
+use Validator;
+use Illuminate\Http\Request;
+
+class ProductOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        //
+        $bill = ProductOrder::get();
+        return response()->json([
+            'data' => $bill
+        ]);
+    }
+    public function getProduct($id_bill)
+    {
+        return response()->json([
+            'data' => ProductOrder::getProductInBill($id_bill),
+            'id_bill' => $id_bill,
+            'total' => Bill::getBill($id_bill)
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function create()
     {
-        //
+        $bill = ProductOrder::get();
+        return response()->json([
+            'data' => $bill
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreDetail_BillRequest  $request
+     * @param  \App\Http\Requests\StoreProductOrderRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $dataProduct = $request->only(['arr_product']);
-        $arrProduct = $dataProduct['arr_product'];
-//        dd($arrProduct);
+        $arrProduct = $dataProduct;
         foreach ($arrProduct as $value)
         {
             $validate = Validator::make($value, [
@@ -53,27 +69,23 @@ class DetailBillController extends Controller
                 response()->json(['message' => $validate->errors()]);
             }
 
-            $product= new Detail_Bill();
+            $product= new ProductOrder();
             $product->ib_bill = 1;
             $product->id_product = $value['id_product'];
             $product->name = $value['name'];
             $product->quantity = $value['quantity'];
             $product->price= $value['price'];
-
             $product->save();
-
-//            Detail_Bill::create($value);
         }
-
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Detail_Bill  $detail_Bill
+     * @param  \App\Models\ProductOrder  $productOrder
      * @return \Illuminate\Http\Response
      */
-    public function show(Detail_Bill $detail_Bill)
+    public function show(ProductOrder $productOrder)
     {
         //
     }
@@ -81,10 +93,10 @@ class DetailBillController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Detail_Bill  $detail_Bill
+     * @param  \App\Models\ProductOrder  $productOrder
      * @return \Illuminate\Http\Response
      */
-    public function edit(Detail_Bill $detail_Bill)
+    public function edit(ProductOrder $productOrder)
     {
         //
     }
@@ -92,11 +104,11 @@ class DetailBillController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateDetail_BillRequest  $request
-     * @param  \App\Models\Detail_Bill  $detail_Bill
+     * @param  \App\Http\Requests\UpdateProductOrderRequest  $request
+     * @param  \App\Models\ProductOrder  $productOrder
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateDetail_BillRequest $request, Detail_Bill $detail_Bill)
+    public function update(UpdateProductOrderRequest $request, ProductOrder $productOrder)
     {
         //
     }
@@ -104,10 +116,10 @@ class DetailBillController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Detail_Bill  $detail_Bill
+     * @param  \App\Models\ProductOrder  $productOrder
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Detail_Bill $detail_Bill)
+    public function destroy(ProductOrder $productOrder)
     {
         //
     }

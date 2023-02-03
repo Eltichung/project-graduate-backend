@@ -28,4 +28,8 @@ class Bill extends Model
             'address' => 'bail|required',
         ]);
     }
+    public static function getBill($id_bill)
+    {
+        return  Bill::where('id', $id_bill)->value('total');
+    }
 }

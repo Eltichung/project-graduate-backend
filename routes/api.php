@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\ProductOrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TypeController;
 use Illuminate\Http\Request;
@@ -24,9 +25,12 @@ Route::group(["prefix" => 'v1/', "as" => "product."], function () {
     Route::delete('/deleteType/{id}', [TypeController::class, 'destroy']);
     //Bill
     Route::get('/getBill', [BillController::class, 'index']);
-    Route::get('/filterStatusBill/status={status}', [BillController::class, 'getBillByStatus']);
+    Route::get('/filterStatusBill/0e={status}', [BillController::class, 'getBillByStatus']);
     Route::get('/filterBill/method={method}', [BillController::class, 'filterBill']);
+    Route::get('/detailBill/id_bill={id_bill}', [ProductOrderController::class, 'getProduct']);
     Route::post('/createBill', [BillController::class, 'store']);
+    Route::post('/detailBill', [ProductOrderController::class, 'store']);
+    Route::get('/test', [ProductOrderController::class, 'index']);
     Route::post('/updateStatus/idBill={id}', [BillController::class, 'updateStatus']);
 });
 

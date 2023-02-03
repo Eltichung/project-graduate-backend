@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Bill;
 use App\Http\Requests\StoreBillRequest;
 use App\Http\Requests\UpdateBillRequest;
+use App\Models\Detail_Bill;
+use App\Models\ProductOrder;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -58,8 +60,33 @@ class BillController extends Controller
         {
             $dataBill = $data;
         }
+
         Bill::create($dataBill);
-        return response()->json(['message' => 'we receive your request', 201]);
+        $bill =  Bill::create($dataBill);;
+        $billId=$bill->id;
+        $dataProduct = $request->only(['arr_product']);
+        $arrProduct = $dataProduct['arr_product'];
+        foreach ($arrProduct as $value)
+        {
+            $validate = Validator::make($value, [
+                'ib_bill' => 'bail|required|numeric',
+                'id_product' => 'bail|required',
+                'name' => 'bail|required',
+                'quantity' => 'bail|required|numeric',
+                'price' => 'bail|required|numeric',
+            ]);
+            if ($validate->fails()) {
+                response()->json(['message' => $validate->errors()]);
+            }
+            $product= new ProductOrder();
+            $product->ib_bill = $billId;
+            $product->id_product = $value['id_product'];
+            $product->name = $value['name'];
+            $product->quantity = $value['quantity'];
+            $product->price= $value['price'];
+            $product->save();
+        }
+        return response()->json(['message' =>$arrProduct, 201]);
     }
 
     public function show(Bill $bill)
