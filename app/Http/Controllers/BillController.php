@@ -84,7 +84,7 @@ class BillController extends Controller
             $product->name = $value['name'];
             $product->quantity = $value['quantity'];
             $product->price= $value['price'];
-            $product->save();
+            $product->save();   
         }
         return response()->json(['message' =>$arrProduct, 201]);
     }

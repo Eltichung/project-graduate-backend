@@ -15,6 +15,7 @@ class Type extends Model
     {
         return Validator::make($data, [
             'name' => 'bail|required|max:500',
+            'imgUrl' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
     }
 }

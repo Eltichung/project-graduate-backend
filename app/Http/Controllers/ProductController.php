@@ -18,6 +18,12 @@ class ProductController extends Controller
             'data' => $product
         ]);
     }
+    public function getAllProduct()
+    {
+        return response()->json([
+            'data' => Product::getAllProduct()
+        ]);
+    }
     public function filter($type)
     {
         return response()->json([
@@ -37,7 +43,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->only(['name', 'type', 'description', 'price', 'discount', 'imgUrl']);
+        $data = $request->only(['name', 'type', 'description', 'price', 'imgUrl']);
         $validator = Product::validate($data);
         $image_path = $request->file('imgUrl')->store('image', 'public');
         $data['imgUrl'] = $image_path;
@@ -58,13 +64,13 @@ class ProductController extends Controller
         //
     }
 
-    public function update(Request $request, $slug)
+    public function update(Request $request)
     {
-        $product = Product::findBySlug($slug);
+        $product = Product::findBySlug($request->slug);
         if (empty($product)) {
             return response()->json(['message' => 'Err']);
         }
-        $data = $request->only(['name', 'type', 'description', 'price', 'discount', 'imgUrl']);
+        $data = $request->only(['name', 'type', 'description', 'price', 'imgUrl']);
         $validator = Product::validate($data);
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()]);
@@ -77,7 +83,7 @@ class ProductController extends Controller
 
     public function destroy($slug)
     {
-        $product = Product::findBySlug($slug);
+        $product = Product::findProductBySlug($slug);
         if (empty($product)) {
             return response()->json(['message' => 'Err']);
         }

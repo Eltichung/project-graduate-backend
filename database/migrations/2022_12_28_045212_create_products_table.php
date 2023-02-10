@@ -21,7 +21,7 @@ return new class extends Migration
             $table->double('price');
             $table->string('imgUrl');
             $table->double('discount')->default(0);
-            $table->integer('isHot')->nullable();
+            $table->integer('isHot')->default(0);
             $table->string('slug')->nullable()->unique();
         });
         Schema::table('products', function (Blueprint $table) {

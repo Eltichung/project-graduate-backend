@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
+use App\Models\Type;
 /**
  * @method static get()
  */
@@ -39,6 +40,11 @@ class Product extends Model
             'price' => 'bail|required|numeric',
             'imgUrl' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+    }
+    public static function getAllProduct()
+    {
+        return self::with('type')->get();
+
     }
     public static function findProductBySlug($slug)
     {
