@@ -22,7 +22,7 @@ Route::group(["prefix" => 'v1/', "as" => "product."], function () {
     //type
     Route::get('/getType', [TypeController::class, 'index']);
     Route::post('/createType', [TypeController::class, 'store']);
-    Route::put('/updateType/{id}', [TypeController::class, 'update']);
+    Route::post('/updateType', [TypeController::class, 'update']);
     Route::delete('/deleteType/{id}', [TypeController::class, 'destroy']);
     //Bill
     Route::get('/getBill', [BillController::class, 'index']);
@@ -32,5 +32,7 @@ Route::group(["prefix" => 'v1/', "as" => "product."], function () {
     Route::post('/createBill', [BillController::class, 'store']);
     Route::post('/detailBill', [ProductOrderController::class, 'store']);
     Route::post('/updateStatus/idBill={id}', [BillController::class, 'updateStatus']);
+    Route::get('/statToday/{date}', [BillController::class, 'statToday']);
+    Route::get('/statByDate/startTime={startTime}&&endTime={endTime}', [BillController::class, 'statByDay']);
 });
 

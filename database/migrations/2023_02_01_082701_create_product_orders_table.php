@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('quantity');
             $table->double('price');
             $table->string('name');
+            $table->timestamps();
         });
     }
 

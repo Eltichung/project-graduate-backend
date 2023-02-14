@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Validator;
 class Bill extends Model
 {
@@ -31,5 +33,23 @@ class Bill extends Model
     public static function getBill($id_bill)
     {
         return  Bill::where('id', $id_bill)->value('total');
+    }
+
+    public static function totalBill($date)
+    {
+        $startDate =  Carbon::parse($date)->format('Y-m-d 00:00:00');
+        $endDate =  Carbon::parse($date)->format('Y-m-d 23:59:59');
+        return  [
+            'total' => Bill::WhereBetween('created_at', [$startDate,$endDate])->sum('total'),
+            'quantity_bill' => Bill::WhereBetween('created_at', [$startDate,$endDate])->count()
+        ];
+    }
+
+    public static function statBill($startTime, $endTime)
+    {
+        return self::WhereBetween('created_at', [$startTime,$endTime])
+            ->select(DB::raw('DATE(created_at) as date'),DB::raw("SUM(total) as total"))
+            ->groupBy(DB::raw('Date(created_at)'))
+            ->get();
     }
 }

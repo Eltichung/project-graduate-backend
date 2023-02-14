@@ -9,6 +9,7 @@ use App\Models\Detail_Bill;
 use App\Models\ProductOrder;
 use Illuminate\Http\Request;
 use Validator;
+use Carbon\Carbon;
 
 class BillController extends Controller
 {
@@ -61,8 +62,7 @@ class BillController extends Controller
             $dataBill = $data;
         }
 
-        Bill::create($dataBill);
-        $bill =  Bill::create($dataBill);;
+        $bill = Bill::create($dataBill);
         $billId=$bill->id;
         $dataProduct = $request->only(['arr_product']);
         $arrProduct = $dataProduct['arr_product'];
@@ -84,7 +84,7 @@ class BillController extends Controller
             $product->name = $value['name'];
             $product->quantity = $value['quantity'];
             $product->price= $value['price'];
-            $product->save();   
+            $product->save();
         }
         return response()->json(['message' =>$arrProduct, 201]);
     }
@@ -132,5 +132,35 @@ class BillController extends Controller
     public function destroy(Bill $bill)
     {
         //
+    }
+
+    public function  statToday($date)
+    {
+
+        $data = [];
+        $topProduct = ProductOrder::arrProductOrder($date);
+        foreach ($topProduct as $item)
+        {   $data[] = [
+            'id' => $item->id_product,
+            'name' => $item['product']->name,
+            'imgUrl' => $item['product']->imgUrl,
+            'total' => $item->total,
+        ];
+        }
+        return  response()->json([
+            'top_product' => $data,
+            'quantity_product' => count($data),
+            'quantity_bill' => Bill::totalBill($date)['quantity_bill'],
+            'total_now' => Bill::totalBill($date)['total'],
+            'total_yesterday' => Bill::totalBill(Carbon::parse($date)->subDay(1))['total'],
+             201]);
+    }
+
+    public function  statByDay($startTime, $endTime)
+    {
+        $startDate =  Carbon::parse($startTime)->format('Y-m-d 00:00:00');
+        $endDate =  Carbon::parse($endTime)->format('Y-m-d 23:59:59');
+
+        return Bill::statBill($startDate, $endDate);
     }
 }

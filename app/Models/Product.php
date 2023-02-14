@@ -50,5 +50,9 @@ class Product extends Model
     {
         return Product::where('slug', $slug)->first();
     }
+    public static  function  getProductByType($idType)
+    {
+        return Product::with('type')->where('type',$idType)->get();
+    }
 }
 

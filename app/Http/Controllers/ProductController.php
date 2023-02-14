@@ -24,10 +24,10 @@ class ProductController extends Controller
             'data' => Product::getAllProduct()
         ]);
     }
-    public function filter($type)
+    public function filter($idType)
     {
         return response()->json([
-            'data' => Product::with('type')->where('type',$type)->get()
+            'data' => Product::getProductByType($idType)
         ]);
     }
     public function search($name)

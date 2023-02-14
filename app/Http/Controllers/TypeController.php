@@ -46,9 +46,9 @@ class TypeController extends Controller
         //
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $type = Type::find($id);
+        $type = Type::find($request->id);
         if (empty($type)) {
             return response()->json(['message' => 'Err']);
         }
@@ -64,8 +64,12 @@ class TypeController extends Controller
     public function destroy($id)
     {
         $type = Type::find($id);
-        if (empty($type)) {
+        if (!isset($type)) {
             return response()->json(['message' => 'Err']);
+        }
+        $product = Product::getProductByType($id);
+        if (isset($product)) {
+            return response()->json(['message' => 'You cant delete type because product exit belong it']);
         }
         $type->delete();
         return response()->json(['message' => 'we receive your request', 201]);
