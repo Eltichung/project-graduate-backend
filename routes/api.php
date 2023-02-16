@@ -4,6 +4,7 @@ use App\Http\Controllers\BillController;
 use App\Http\Controllers\ProductOrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TypeController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -11,28 +12,34 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::group(["prefix" => 'v1/', "as" => "product."], function () {
+    Route::post('/admin/login', [UserController::class, 'loginUser']);
     //products
     Route::get('/getProduct', [ProductController::class, 'index']);
     Route::get('/getAllProduct', [ProductController::class, 'getAllProduct']);
     Route::get('/getProduct/{type}', [ProductController::class, 'filter']);
-    Route::post('/createProduct', [ProductController::class, 'store']);
-    Route::post('/updateProduct', [ProductController::class, 'update']);
     Route::get('/product/{name}', [ProductController::class, 'search']);
-    Route::delete('/deleteProduct/{slug}', [ProductController::class, 'destroy']);
     //type
     Route::get('/getType', [TypeController::class, 'index']);
-    Route::post('/createType', [TypeController::class, 'store']);
-    Route::post('/updateType', [TypeController::class, 'update']);
-    Route::delete('/deleteType/{id}', [TypeController::class, 'destroy']);
     //Bill
-    Route::get('/getBill', [BillController::class, 'index']);
-    Route::get('/filterStatusBill/status={status}', [BillController::class, 'getBillByStatus']);
-    Route::get('/filterBill/method={method}', [BillController::class, 'filterBill']);
-    Route::get('/detailBill/id_bill={id_bill}', [ProductOrderController::class, 'getProduct']);
     Route::post('/createBill', [BillController::class, 'store']);
-    Route::post('/detailBill', [ProductOrderController::class, 'store']);
-    Route::post('/updateStatus/idBill={id}', [BillController::class, 'updateStatus']);
-    Route::get('/statToday/{date}', [BillController::class, 'statToday']);
-    Route::get('/statByDate/startTime={startTime}&&endTime={endTime}', [BillController::class, 'statByDay']);
 });
-
+Route::group(["prefix" => 'v1/', "as" => "product.", 'middleware' => ['auth:sanctum']], function () {
+    //products
+    Route::post('admin/createProduct', [ProductController::class, 'store']);
+    Route::post('admin/updateProduct', [ProductController::class, 'update']);
+    Route::delete('admin/deleteProduct/{slug}', [ProductController::class, 'destroy']);
+    //type
+    Route::post('admin/createType', [TypeController::class, 'store']);
+    Route::post('admin/updateType', [TypeController::class, 'update']);
+    Route::delete('admin/deleteType/{id}', [TypeController::class, 'destroy']);
+    //Bill
+    Route::get('admin/getBill', [BillController::class, 'index']);
+    Route::get('admin/filterStatusBill/status={status}', [BillController::class, 'getBillByStatus']);
+    Route::get('admin/filterBill/method={method}', [BillController::class, 'filterBill']);
+    Route::get('admin/detailBill/id_bill={id_bill}', [ProductOrderController::class, 'getProduct']);
+    Route::post('admin/createBill', [BillController::class, 'store']);
+    Route::post('admin/detailBill', [ProductOrderController::class, 'store']);
+    Route::post('admin/updateStatus/idBill={id}', [BillController::class, 'updateStatus']);
+    Route::get('admin/statToday/{date}', [BillController::class, 'statToday']);
+    Route::get('admin/statByDate/startTime={startTime}&&endTime={endTime}', [BillController::class, 'statByDay']);
+});

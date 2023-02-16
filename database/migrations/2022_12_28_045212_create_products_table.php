@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('description');
             $table->double('price');
             $table->string('imgUrl');
+            $table->double('quantity')->default(0);
             $table->double('discount')->default(0);
             $table->integer('isHot')->default(0);
             $table->string('slug')->nullable()->unique();

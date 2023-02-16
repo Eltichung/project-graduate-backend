@@ -16,7 +16,8 @@ class BillController extends Controller
 
     public function getBillByStatus($status)
     {
-        $bill = Bill::where('status', $status)->get();
+        $date = Carbon::now()->format('Y-m-d');
+        $bill = Bill::where('status', $status)->whereRaw('Date(created_at) = ?',$date)->get()->reverse();
         return response()->json([
             'data' => $bill
         ]);
