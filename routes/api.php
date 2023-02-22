@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\NotiController;
 use App\Http\Controllers\ProductOrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TypeController;
@@ -13,7 +14,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::group(["prefix" => 'v1/', "as" => "product."], function () {
     Route::post('/admin/login', [UserController::class, 'loginUser']);
-    //products
+    Route::get('/noti', [NotiController::class, 'noti']);
+    //productsx
     Route::get('/getProduct', [ProductController::class, 'index']);
     Route::get('/getAllProduct', [ProductController::class, 'getAllProduct']);
     Route::get('/getProduct/{type}', [ProductController::class, 'filter']);
