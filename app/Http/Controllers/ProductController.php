@@ -6,6 +6,8 @@ use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+
 //use http\Env\Request;
 
 class ProductController extends Controller
@@ -45,8 +47,9 @@ class ProductController extends Controller
     {
         $data = $request->only(['name', 'type', 'description', 'price', 'imgUrl']);
         $validator = Product::validate($data);
-        $image_path = $request->file('imgUrl')->store('image', 'public');
-        $data['imgUrl'] = $image_path;
+        $request->file('imgUrl')->store('public/images');
+        $nameImg = $request->file('imgUrl')->getClientOriginalName();
+        $data['imgUrl'] = URL::asset('storage/images/'.$nameImg);
         if ($validator->fails()) {
              response()->json(['message' => 'Err']);
         }

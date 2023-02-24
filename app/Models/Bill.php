@@ -12,7 +12,11 @@ class Bill extends Model
     use HasFactory;
     const UPDATED_AT = null;
     protected $fillable = ['name','phone','address','total', 'status', 'location', 'method'];
-
+    const BILL_CONFIRM = 1;
+    const BILL_SUCCESS = 2;
+    const BILL_CANCEL = 3;
+    const BILL_ONLINE = 2;
+    const BILL_OFFLINE = 1;
     public static function validate($data)
     {
         return Validator::make($data, [
