@@ -83,7 +83,6 @@ class ProductController extends Controller
         $product->update($data);
             return response()->json(['message' => 'we receive your request', 201]);
     }
-
     public function destroy($slug)
     {
         $product = Product::findProductBySlug($slug);

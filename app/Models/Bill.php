@@ -15,8 +15,8 @@ class Bill extends Model
     const BILL_CONFIRM = 1;
     const BILL_SUCCESS = 2;
     const BILL_CANCEL = 3;
-    const BILL_ONLINE = 2;
     const BILL_OFFLINE = 1;
+    const BILL_ONLINE = 2;
     public static function validate($data)
     {
         return Validator::make($data, [
@@ -55,5 +55,9 @@ class Bill extends Model
             ->select(DB::raw('DATE(created_at) as date'),DB::raw("SUM(total) as total"))
             ->groupBy(DB::raw('Date(created_at)'))
             ->get();
+    }
+    public static function getBillMethod($method, $status)
+    {
+       return Bill::where('method', $method)->where('status', $status)->get();
     }
 }
