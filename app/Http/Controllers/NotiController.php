@@ -11,5 +11,6 @@ class NotiController extends Controller
     public function noti(Request $request)
     {
         return  event(new Noti(Bill::getBillMethod(Bill::BILL_ONLINE, Bill::BILL_CONFIRM)));
+//        return  event(new Noti('New Bill'));
     }
 }

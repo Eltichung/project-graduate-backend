@@ -41,7 +41,7 @@ Route::group(["prefix" => 'v1/', "as" => "product.", 'middleware' => ['auth:sanc
     Route::get('admin/detailBill/id_bill={id_bill}', [ProductOrderController::class, 'getProduct']);
     Route::post('admin/createBill', [BillController::class, 'store']);
     Route::post('admin/detailBill', [ProductOrderController::class, 'store']);
-    Route::post('admin/updateStatus/idBill={id}', [BillController::class, 'updateStatus']);
+    Route::post('admin/updateStatus', [BillController::class, 'updateStatus']);
     Route::get('admin/statToday/{date}', [BillController::class, 'statToday']);
     Route::get('admin/statByDate/startTime={startTime}&&endTime={endTime}', [BillController::class, 'statByDay']);
 });

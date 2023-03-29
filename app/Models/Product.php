@@ -38,7 +38,7 @@ class Product extends Model
             'type' => 'bail|required|max:500',
             'description' => 'bail|required|max:500',
             'price' => 'bail|required|numeric',
-            'imgUrl' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'imgUrl' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
     }
     public static function getAllProduct()

@@ -73,13 +73,17 @@ class ProductController extends Controller
         if (empty($product)) {
             return response()->json(['message' => 'Err']);
         }
-        $data = $request->only(['name', 'type', 'description', 'price', 'imgUrl']);
+        $data = $request->only(['name', 'type', 'description', 'price']);
         $validator = Product::validate($data);
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()]);
         }
-        $image_path = $request->file('imgUrl')->store('image', 'public');
-        $data['imgUrl'] = $image_path;
+        if (file_exists($request->file('imgUrl')))
+        {
+            $request->file('imgUrl')->store('public/images');
+            $nameImg = $request->file('imgUrl')->getClientOriginalName();
+            $data['imgUrl'] = URL::asset('storage/images/'.$nameImg);
+        }
         $product->update($data);
             return response()->json(['message' => 'we receive your request', 201]);
     }

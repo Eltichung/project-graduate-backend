@@ -58,6 +58,6 @@ class Bill extends Model
     }
     public static function getBillMethod($method, $status)
     {
-       return Bill::where('method', $method)->where('status', $status)->get();
+       return Bill::where('method', $method)->where('status', $status)->count();
     }
 }

@@ -16,8 +16,9 @@ class BillController extends Controller
 
     public function getBillByStatus($status)
     {
+//        ->whereRaw('Date(created_at) = ?',$date)
         $date = Carbon::now()->format('Y-m-d');
-        $bill = Bill::where('status', $status)->whereRaw('Date(created_at) = ?',$date)->get()->reverse();
+        $bill = Bill::where('status', $status)->get()->reverse();
         return response()->json([
             'data' => $bill
         ]);
@@ -106,18 +107,19 @@ class BillController extends Controller
         //
     }
 
-    public function updateStatus(Request $request, $id)
+    public function updateStatus(Request $request)
     {
-        $bill = Bill::find($id);
-        if (empty($bill)) {
-            return response()->json(['message' => 'Err']);
-        }
-        $data = $request->only(['status']);
+        $data = $request->only(['status', 'id']);
         $validator = Validator::make($data, [
             'status' => 'bail|required|numeric',
+            'id' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()]);
+        }
+        $bill = Bill::find($data['id']);
+        if (empty($bill)) {
+            return response()->json(['message' => 'Err']);
         }
         $bill->status = $data['status'];
         $bill->save();

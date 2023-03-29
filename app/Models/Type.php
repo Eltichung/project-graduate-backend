@@ -10,12 +10,12 @@ class Type extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'imgUrl'];
     public static function validate($data)
     {
         return Validator::make($data, [
             'name' => 'bail|required|max:500',
-            'imgUrl' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'imgUrl' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
     }
 }
