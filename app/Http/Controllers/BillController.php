@@ -19,7 +19,7 @@ class BillController extends Controller
         $now = Carbon::now();
         $startDate =  Carbon::parse($now)->format('Y-m-d 00:00:00');
         $endDate =  Carbon::parse($now)->format('Y-m-d 23:59:59');
-        $bill = Bill::where('status', $status)->WhereBetween('created_at', [$startDate,$endDate])->get()->reverse();
+        $bill = Bill::where('status', $status)->WhereBetween('created_at', [$startDate,$endDate])->orderBy('id','desc')->get();
         return response()->json([
             'data' => $bill
         ]);
@@ -69,6 +69,10 @@ class BillController extends Controller
         $billId=$bill->id;
         $dataProduct = $request->only(['arr_product']);
         $arrProduct = $dataProduct['arr_product'];
+        if(count($dataProduct)<=0)
+        {
+            return response()->json(['message' =>'Product is not null', 401]);
+        }
         foreach ($arrProduct as $value)
         {
             $validate = Validator::make($value, [

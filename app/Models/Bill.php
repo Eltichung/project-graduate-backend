@@ -38,7 +38,10 @@ class Bill extends Model
     {
         return  Bill::where('id', $id_bill)->value('total');
     }
-
+    public static function getBillById($id_bill)
+    {
+        return  Bill::where('id', $id_bill)->get();
+    }
     public static function totalBill($date)
     {
         $startDate =  Carbon::parse($date)->format('Y-m-d 00:00:00');

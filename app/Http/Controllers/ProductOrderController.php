@@ -28,6 +28,7 @@ class ProductOrderController extends Controller
     {
         return response()->json([
             'data' => ProductOrder::getProductInBill($id_bill),
+            'customer' => Bill::getBillById($id_bill),
             'id_bill' => $id_bill,
             'total' => Bill::getBill($id_bill)
         ]);
