@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\ProductOrder;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 
@@ -15,7 +17,13 @@ class ProductController extends Controller
 
     public function index()
     {
-        $product = Product::with('type')->where('isHot',1)->get();
+        $date = Carbon::now()->subDay();
+        $idProduct = [];
+        $topProduct = ProductOrder::arrProductOrder($date);
+        foreach ($topProduct as $item) {
+            $idProduct[]= [$item->id_product];
+        }
+        $product = Product::with('type')->whereIn('id',$idProduct)->get();
         return response()->json([
             'data' => $product
         ]);

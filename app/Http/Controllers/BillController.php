@@ -6,6 +6,7 @@ use App\Models\Bill;
 use App\Http\Requests\StoreBillRequest;
 use App\Http\Requests\UpdateBillRequest;
 use App\Models\Detail_Bill;
+use App\Models\Discount;
 use App\Models\ProductOrder;
 use Illuminate\Http\Request;
 use Validator;

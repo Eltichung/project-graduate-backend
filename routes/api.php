@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\NotiController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\ProductOrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TypeController;
@@ -36,6 +37,8 @@ Route::group(["prefix" => 'v1/', "as" => "product.", 'middleware' => ['auth:sanc
     Route::delete('admin/deleteType/{id}', [TypeController::class, 'destroy']);
     //Bill
     Route::get('admin/getBill', [BillController::class, 'index']);
+    Route::get('admin/discount', [DiscountController::class, 'index']);
+    Route::post('admin/updateDiscount', [DiscountController::class, 'update']);
     Route::get('admin/filterStatusBill/status={status}', [BillController::class, 'getBillByStatus']);
     Route::get('admin/filterBill/method={method}', [BillController::class, 'filterBill']);
     Route::get('admin/detailBill/id_bill={id_bill}', [ProductOrderController::class, 'getProduct']);
