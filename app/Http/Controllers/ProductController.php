@@ -72,7 +72,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        //
+        //o
     }
 
     public function update(Request $request)
