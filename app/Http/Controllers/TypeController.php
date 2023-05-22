@@ -80,7 +80,7 @@ class TypeController extends Controller
         }
         $product = Product::getProductByType($id);
         if (count($product) > 0) {
-            return response()->json(['message' => 'You cant delete type because product exit belong it'], 405);
+            return response()->json(['message' => "You can't delete type because product exit belong it"], 405);
         }
         $type->delete();
         return response()->json(['message' => 'we receive your request', 201]);

@@ -23,7 +23,14 @@ class ProductController extends Controller
         foreach ($topProduct as $item) {
             $idProduct[]= [$item->id_product];
         }
-        $product = Product::with('type')->whereIn('id',$idProduct)->get();
+        if(count($idProduct)<=0)
+        {
+            $product = Product::with(('type'))->inRandomOrder()->take(5)->get();
+        }
+        else
+        {
+            $product = Product::with('type')->whereIn('id',$idProduct)->get();
+        }
         return response()->json([
             'data' => $product
         ]);
