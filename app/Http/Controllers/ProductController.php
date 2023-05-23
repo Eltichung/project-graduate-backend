@@ -62,9 +62,9 @@ class ProductController extends Controller
     {
         $data = $request->only(['name', 'type', 'description', 'price', 'imgUrl']);
         $validator = Product::validate($data);
-        $request->file('imgUrl')->store('public/images');
-        $nameImg = $request->file('imgUrl')->getClientOriginalName();
-        $data['imgUrl'] = URL::asset('storage/images/'.$nameImg);
+        $imagePath = $request->file('imgUrl')->store('public/images');
+        $imagePath = explode("public", $imagePath);
+        $data['imgUrl'] = asset('storage/' . $imagePath[1]);
         if ($validator->fails()) {
              response()->json(['message' => 'Err']);
         }
@@ -95,9 +95,9 @@ class ProductController extends Controller
         }
         if (file_exists($request->file('imgUrl')))
         {
-            $request->file('imgUrl')->store('public/images');
-            $nameImg = $request->file('imgUrl')->getClientOriginalName();
-            $data['imgUrl'] = URL::asset('storage/images/'.$nameImg);
+            $imagePath = $request->file('imgUrl')->store('public/images');
+            $imagePath = explode("public", $imagePath);
+            $data['imgUrl'] = asset('storage/' . $imagePath[1]);
         }
         $product->update($data);
             return response()->json(['message' => 'we receive your request', 201]);

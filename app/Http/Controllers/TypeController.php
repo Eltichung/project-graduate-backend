@@ -31,9 +31,9 @@ class TypeController extends Controller
     {
         $data = $request->only(['name', 'imgUrl']);
         $validator = Type::validate($data);
-        $request->file('imgUrl')->store('public/images');
-        $nameImg = $request->file('imgUrl')->getClientOriginalName();
-        $data['imgUrl'] = URL::asset('storage/images/'.$nameImg);
+        $imagePath = $request->file('imgUrl')->store('public/images');
+        $imagePath = explode("public", $imagePath);
+        $data['imgUrl'] = asset('storage/' . $imagePath[1]);
         if ($validator->fails()) {
             response()->json(['message' => 'Err']);
         }
@@ -55,7 +55,7 @@ class TypeController extends Controller
     {
         $type = Type::find($request->id);
         if (empty($type)) {
-            return response()->json(['message' => 'Err']);
+            return response()->json(['message' => 'Can not find record'], 503);
         }
         $data = $request->only(['name', 'imgUrl']);
         $validator = Type::validate($data);
@@ -64,9 +64,9 @@ class TypeController extends Controller
         }
         if (file_exists($request->file('imgUrl')))
         {
-            $request->file('imgUrl')->store('public/images');
-            $nameImg = $request->file('imgUrl')->getClientOriginalName();
-            $data['imgUrl'] = URL::asset('storage/images/'.$nameImg);
+            $imagePath = $request->file('imgUrl')->store('public/images');
+            $imagePath = explode("public", $imagePath);
+            $data['imgUrl'] = asset('storage/' . $imagePath[1]);
         }
         $type->update($data);
         return response()->json(['message' => 'we receive your request', 201]);
